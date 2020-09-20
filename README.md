@@ -57,6 +57,6 @@ Factory class to return the correct object (Process/InfoGenerator) according to 
 
 
 ## Future Work
-P0 Add implementations for other sources (SQL etc)
-P1 Extend concurrency to handle a distributed environment (Multiple machines)
+P0 Add implementations for other sources (SQL etc) <br />
+P1 Extend concurrency to handle a distributed environment (Multiple machines) <br />
 P1 Migrate to stateless to make it easier to scale
