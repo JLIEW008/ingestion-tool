@@ -1,0 +1,50 @@
+logger:
+  output_file: 'logs/logging.log'
+
+runner_details:
+  timeout: 3 # in minutes
+
+job_details:
+  retries: 3
+  retry_wait_time: 5 # in minutes
+
+concurrency:
+  type: 'manual' # Can be dynamic or manual.
+                 # If dynamic is used, the number of workers will depend on the os.core (2x of os.core)
+  num_workers: 4
+
+sources:
+  - name: 'sgx'
+    type: 'dl'
+    parsing: 'sgx'
+    offset: -1 # number of days from current date - used for latest
+    update: # upstream update timing and frequency
+      frequency: 'daily'
+      time: 14
+    mapping:
+      - 'mapping/sgx_date_mapping.json'
+    jobs:
+      - name: 'tick'
+        url: 'https://links.sgx.com/1.0.0/derivatives-historical/{SGX_DATE}/WEBPXTICK_DT.zip'
+        output_path: 'data/tick_data/'
+        file_name: 'tick_data_%y%d%m.zip'
+        logs: 'logs/source/tick/tick_%y%d%m.log'
+
+      - name: 'tick_data_stucture'
+        url: 'https://links.sgx.com/1.0.0/derivatives-historical/{SGX_DATE}/TickData_structure.dat'
+        output_path: 'data/tick_data_structure/'
+        file_name: 'tick_data_structure%y%d%m.dat'
+        logs: 'logs/source/tick_data_structure/tick_data_structure_%y%d%m.log'
+
+      - name: 'trade_cancellation'
+        url: 'https://links.sgx.com/1.0.0/derivatives-historical/{SGX_DATE}/TC.txt'
+        output_path: 'data/tc_data/'
+        file_name: 'tc_data_%y%d%m.txt'
+        logs: 'logs/source/tc/trade_cancellation_%y%d%m.log'
+
+      - name: 'trade_cancellation_data_structure'
+        url: 'https://links.sgx.com/1.0.0/derivatives-historical/{SGX_DATE}/TC_structure.dat'
+        output_path: 'data/tc_structure/'
+        file_name: 'tc_structure_%y%d%m.dat'
+        logs: 'logs/source/tc_data_structure/trade_cancellation_data_stucture_%y%d%m.log'
+
